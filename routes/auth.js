@@ -19,7 +19,9 @@ router.post('/register', async(req, res) => {
         await user.save();
         console.log(user);
         console.log('save to db');
-        res.redirect('/');
+        passport.authenticate('local')(req, res, function() {
+            res.redirect('/');
+        })
     } catch (error) {
         console.log(error);
     }
