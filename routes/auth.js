@@ -17,24 +17,25 @@ router.post('/register', async(req, res) => {
         });
 
         await user.save();
-        console.log('save data');
-        res.render('index', { user });
+        console.log(user);
+        console.log('save to db');
+        res.redirect('/');
     } catch (error) {
         console.log(error);
     }
 });
-
 router.post(
     '/login',
     passport.authenticate('local', {
         failureRedirect: '/login',
-        successRedirect: '/'
-    }),
-    async(req, res) => {
-        const { username, password } = req.body;
-
-        return res.redirect('/');
-    }
+        successRedirect: '/',
+    })
+    // async(req, res) => {
+    //     const { username, password } = req.body;
+    //     console.log('login2');
+    //     return res.redirect('/');
+    // }
 );
+
 
 module.exports = router;

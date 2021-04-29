@@ -15,19 +15,22 @@ const session = require('express-session');
 // ก็จะ cb (คือ callback function) ส่งต่อไปให้ `req.user` จะมีค่า user
 // และไป step ถัดไปคือ serialzie และ deserialize
 passport.use(
-    new LocalStrategy((username, password, cb) => {
+    new LocalStrategy((username, password, done) => {
         User.findOne({ username }, (err, user) => {
             if (err) {
-                return cb(err);
+                return done(err);
             }
             if (!user) {
-                return cb(null, false);
+                console.log('incorrect username');
+                return done(null, false, { message: 'Incorrect username' });
             }
 
             if (bcrypt.compareSync(password, user.password)) {
-                return cb(null, user);
+                console.log(user.username + ' is login');
+                return done(null, user);
             }
-            return cb(null, false);
+            console.log('incorrect password');
+            return done(null, false, { message: 'Incorrect password.' });
         });
     })
 );
@@ -61,7 +64,7 @@ app.set('view engine', 'ejs');
 
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
