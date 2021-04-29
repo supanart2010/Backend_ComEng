@@ -7,12 +7,8 @@ const User = require('../models/User');
 
 router.post('/register', async(req, res) => {
     try {
+        //ยังไม่ได้ validate ว่า ช่องที่กรอกแต่ละช่องเป็น email จริงไหม หรือ pass ต้องเกินกี่ตัว
         const { username, password, email } = req.body;
-        // simple validation
-        if (!email || !username || !password) {
-            return res.render('register', { message: 'Please try again' });
-        }
-
         const passwordHash = bcrypt.hashSync(password, 10);
         user = new User({
             username,
