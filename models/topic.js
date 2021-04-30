@@ -7,7 +7,7 @@ const topicSchema = new Schema({
     required: true,
   },
   author: {
-    type: String, //to be changed to "Schema.Types.ObjectId, ref: 'User'"
+    type: Schema.Types.ObjectId, ref: 'User', 
     required: true,
   },
   //comments: [{ type: Schema.Types.ObjectId, ref: 'Comment' }],

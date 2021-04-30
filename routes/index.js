@@ -10,8 +10,13 @@ const isLoggedIn = (req, res, next) => {
     }
 };
 
+
 router.get('/', isLoggedIn, function(req, res, next) {
-    res.render('index', { title: 'Express', user: req.user });
+    //console.log(req.user);
+    //res.render('index', { title: 'Express', user: req.user });
+    //var string = encodeURIComponent(req.user._id);
+    //res.redirect('/topics?userID=' + string);
+    res.redirect('/topics');
 });
 
 router.get('/register', (req, res) => {
