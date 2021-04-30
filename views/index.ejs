@@ -1,31 +1,31 @@
 <!DOCTYPE html>
-<html>
-  <head>
+<html lang="en">
+
+<head>
     <meta charset="UTF-8">
-    <title>test page</title>
-  </head>
-  <body>
-    <div>
-      <h1>All Topic</h1>
-      <% if (topics.length > 0) { %>
-        <% topics.forEach(topics => { %>
-            <h3><%= topics.body %></h3>
-            <p><%= topics.author %></p>
-        <% }) %>
-      <% } else { %>
-        <p>There are no topics to display...</p>
-      <% } %>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <%- include('layout')%>
 
-      <h1>All Comment</h1>
-      <% if (comments.length > 0) { %>
-        <% comments.forEach(comments => { %>
-            <h3><%= comments.body %></h3>
-            <p><%= comments.author %></p>
-        <% }) %>
-      <% } else { %>
-        <p>There are no comments to display...</p>
-      <% } %>
+</head>
 
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1></h1>
+            </div>
+        </div>
+        <h1>
+            <%= user %>
+        </h1>
+        <div class="row">
+            <div class="col-12"><a class="btn btn-link"="" href="/login">Please Login to see TOP Secret!</a></div>
+            <a href="/logout">
+                <button>Logout</button>
+            </a>
+        </div>
     </div>
-  </body>
+</body>
 </html>

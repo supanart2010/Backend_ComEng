@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <%- include('layout') %>
+</head>
+
+<body>
+    <div class="form-container">
+        <form class="form-signin" method="POST" action="/auth/register">
+            <h2>Please Register</h2>
+            <div class="form-group"><label class="sr-only" for="username">Username</label><input class="form-control" type="text" name="username" id="username" placeholder="Uesrname" required="required" /></div>
+            <div class="form-group"><label class="sr-only" for="email">email</label><input class="form-control" type="text" name="email" id="eamil" placeholder="Email" required="required" /></div>
+            <div class="form-group"><label class="sr-only" for="password">Password</label><input class="form-control" type="password" name="password" id="password" placeholder="Password" required="required" /></div><button class="btn btn-primary btn-block" type="submit">Register</button>
+            <a class="btn btn-link" href="/login">Have an account?</a>
+            <p>
+                <%= message%>
+            </p>
+        </form>
+    </div>
+</body>
+
+</html>
