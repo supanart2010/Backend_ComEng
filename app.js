@@ -9,12 +9,10 @@ var cookieParser = require('cookie-parser');
 const LocalStrategy = require('passport-local').Strategy;
 const session = require('express-session');
 
-// import models
-const Topic = require('./models/topic');
-const Comment = require('./models/comment');
-
-var indexRouter = require('./routes/index');
-var authRouter = require('./routes/auth');
+// import routers
+const indexRouter = require('./routes/index');
+const authRouter = require('./routes/auth');
+const topicRouter = require('./routes/topic');
 
 // ใช้ LocalStrategy โดยใช้ username และ password
 // ภายใน function จะใช้ User.findOne() เพื่อหา username ใน Database
@@ -88,60 +86,6 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.get('/', (req,res) => {
-   Topic.find()
-    .then((topics) => {
-        Comment.find()
-          .then(comments => {
-            res.render('index', {topics, comments});
-          })
-    })
-    .catch((err) => {
-        console.log(err);
-    });
-});
-
-app.get('/add', (req,res) => {
-    const topic = new Topic({
-        body: "topic3",
-        author: 'mine'
-    });
-
-    topic.save()
-        .then((result) => {
-            res.send(result)
-        })
-        .catch((err) => {
-            console.log(err);
-        });
-});
-
-app.get('/add-cm', (req,res) => {
-    Topic.findOne({body:"topic1"}).then(result => {
-        const comment = new Comment({
-            body: "comment1",
-            author: "a",
-            topic: result._id
-        });
-        comment.save()
-            .then((result) => {
-                res.send(result)
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    });
-});
-
-app.get('/cm', (req,res) => {
-    Comment.findOne({body:"comment1"})
-        .populate('topic')
-        .exec((err,comment) => {
-            if(err) console.log(err);
-            console.log(comment.topic.body);
-            res.send(comment);
-        })
-});
-
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
+app.use('/topics', topicRouter);
