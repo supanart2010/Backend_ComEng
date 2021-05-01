@@ -14,6 +14,7 @@ const session = require('express-session');
 const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
 const topicRouter = require('./routes/topic');
+const commentRouter = require('./routes/comment');
 
 // ใช้ LocalStrategy โดยใช้ username และ password
 // ภายใน function จะใช้ User.findOne() เพื่อหา username ใน Database
@@ -92,7 +93,7 @@ app.use((req,res,next) => {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers",
      "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-     );
+     ); 
     if (req.method === 'OPTIONS') {
         res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE, GET');
         return res.status(200).json({});
@@ -103,9 +104,20 @@ app.use((req,res,next) => {
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
 app.use('/topics', topicRouter);
+app.use('/comment', commentRouter)
+
+const Topic = require('./models/topic');
+const Comment = require('./models/comment');
+const Test = require('./models/test');
+const mongoose = require('mongoose');
+
+app.get('/test', async (req,res) => {
+    const result = await Topic.findById('608be494fd737b2d7029e8a1');
+    res.json(result);
+});
+
 
 //handling errors
-
 app.use((req,res,next) => {
     const err = new Error('Not found');
     err.status = 404;
