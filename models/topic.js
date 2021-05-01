@@ -11,8 +11,11 @@ const topicSchema = new Schema({
     required: true,
   },
   //comments: [{ type: Schema.Types.ObjectId, ref: 'Comment' }],
-  likes: Number,
-}, {timestamps: true});
+  likes: {
+    type: Number,
+    default: 0,
+  }
+}, { timestamps: true});
 
 const Topic = mongoose.model('Topic', topicSchema);
 module.exports = Topic;

@@ -14,7 +14,10 @@ const commentSchema = new Schema({
     type: Schema.Types.ObjectId, ref: 'Topic',
     required: true
   },
-  likes: Number,
+  likes: {
+    type: Number,
+    default: 0,
+  }
 }, {timestamps: true});
 
 const Comment = mongoose.model('Comment', commentSchema);
