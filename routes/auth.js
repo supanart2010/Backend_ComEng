@@ -6,9 +6,20 @@ const User = require('../models/User');
 
 
 router.post('/register', async(req, res) => {
+
+    //ยังไม่ได้ validate ว่า ช่องที่กรอกแต่ละช่องเป็น email จริงไหม หรือ pass ต้องเกินกี่ตัว
+    const { username, password, email } = req.body;
     try {
-        //ยังไม่ได้ validate ว่า ช่องที่กรอกแต่ละช่องเป็น email จริงไหม หรือ pass ต้องเกินกี่ตัว
-        const { username, password, email } = req.body;
+        let haveUsername = await User.findOne({ username });
+        if (haveUsername) {
+            console.log('username already exists');
+            return res.redirect('/register');
+        }
+        let haveEmail = await User.findOne({ email });
+        if (haveEmail) {
+            console.log('email already exists');
+            return res.redirect('/register');
+        }
         const passwordHash = bcrypt.hashSync(password, 10);
         user = new User({
             username,
@@ -23,14 +34,15 @@ router.post('/register', async(req, res) => {
             res.redirect('/');
         })
     } catch (error) {
-        console.log(error);
+        console.log('have error');
+        res.redirect('/');
     }
 });
 router.post(
     '/login',
     passport.authenticate('local', {
         failureRedirect: '/login',
-        successRedirect: '/',
+        successRedirect: '/addtopic',
     })
     // async(req, res) => {
     //     const { username, password } = req.body;

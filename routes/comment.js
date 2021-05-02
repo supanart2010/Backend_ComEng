@@ -4,80 +4,73 @@ const Comment = require('../models/comment');
 
 const router = express.Router();
 
-// add new comment, **expects body, topicId in req.body**
-router.post('/',(req,res,next) => {
-    const id = req.body.topicId;
-    Topic.findById(id)
-        .then(topic => {
-            if(!topic) {
-                return res.status(404).json({
-                    message: 'Topic not Found'
-                });
-            }
-            const newComment = new Comment({
-                body: req.body.body,
-                topic: req.body.topicId,
-                author: req.user._id,
-            });
-            return newComment.save();
+const isAuthenticated = (req, res, next) => {
+    if(req.user){
+        console.log('authenticated');
+        return next();
+    } else{
+        console.log('not authenticated')
+        //res.redirect('/login');
+        res.status(401).json({
+            message: "user not authenticated"
         })
-        .then(result => {
-            res.status(201).json({
-                message: "Comment created",
-                comment: newComment,
-                request: {
-                    type: 'GET',
-                    url: "http://localhost:4000/topics/" + id
-                }
-              });
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({
-                error: err
-            });
-        });
-});
+    }
+};
 
 //edit comment **expects newBody in req.body**
-router.patch('/:commentId',(req,res,next) => {
+// tested only with dummy userIds
+router.patch('/:commentId', isAuthenticated, (req,res,next) => {
     const id = req.params.commentId;
-    Comment.findByIdAndUpdate(id, { $set: { body: req.body.newBody } })
+    const userId = req.user._id;
+    Comment.updateOne({_id: id, author: userId}, { $set: { body: req.body.newBody } })
         .exec()
         .then(result => {
-            res.status(200).json({
-                message: 'Comment edited',
-                request: {
-                    type: 'GET',
-                    url: 'http://localhost:4000/topics/' + id
-                }
-            });
+            console.log(result);
+            if(result.nModified === 1) {
+                res.status(200).json({
+                    message: 'Comment edited',
+                    // request: {
+                    //     type: 'GET',
+                    //     url: 'http://localhost:4000/topics/' + id
+                    // }
+                });
+            }
+            else {
+                res.status(405).json({
+                    message: "Only the comment owner can edit this comment"
+                });
+            }
         })
         .catch(err =>{
             console.log(err);
             res.status(500).json({
+                message: "Error editing comment",
                 error: err
             });
         });
 });
 
-//didnt check user permission
-router.delete('/:commentId',(req,res,next) => {
+// delete a comment
+// tested only with dummy userIds
+router.delete('/:commentId', isAuthenticated, (req,res,next) => {
     const id = req.params.commentId;
-    Comment.findByIdAndDelete(id)
+    const userId = req.user._id;
+    Comment.remove({_id: id, author: userId}, {single: true})
         .exec()
         .then(result => {
-            res.status(200).json({
-                message: 'Comment deleted',
-                request: {
-                    type: 'GET',
-                    url: 'localhost:4000/topics/'
-                }
-            });
+            if(result.deletedCount === 1){
+                res.status(200).json({
+                    message: "Comment deleted"
+                });
+            } else {
+                res.status(403).json({
+                    message: "Only the comment owner can delete this comment"
+                })
+            }
         })
         .catch(err => {
-            console.log(err);
-            res.status(500).json({
+            console.log(err).json({
+                message: "Error deleting comment",
                 error: err
             });
         });

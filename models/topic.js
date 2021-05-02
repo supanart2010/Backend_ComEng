@@ -10,7 +10,9 @@ const topicSchema = new Schema({
     type: Schema.Types.ObjectId, ref: 'User', 
     required: true,
   },
-  //comments: [{ type: Schema.Types.ObjectId, ref: 'Comment' }],
+  imageUrl: {
+    type: String
+  },
   likes: {
     type: Number,
     default: 0,
