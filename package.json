@@ -20,25 +20,26 @@
         "mongoose": "^5.12.5",
         "multer": "^1.4.2",
         "multer-gridfs-storage": "^4.2.0",
-        "nodemon": "^2.0.7",
         "passport": "^0.4.1",
         "passport-local": "^1.0.0",
         "path": "^0.12.7",
         "uuid": "^8.3.2"
     },
-    "devDependencies": {},
+    "devDependencies": {
+        "nodemon": "^2.0.7"
+    },
     "scripts": {
         "start": "node app.js",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/supanart2010/Backend_ComEng.git"
+        "url": "git+https://github.com/supmine/Backend_ComEng.git"
     },
     "author": "",
     "license": "ISC",
     "bugs": {
-        "url": "https://github.com/supanart2010/Backend_ComEng/issues"
+        "url": "https://github.com/supmine/Backend_ComEng/issues"
     },
-    "homepage": "https://github.com/supanart2010/Backend_ComEng#readme"
+    "homepage": "https://github.com/supmine/Backend_ComEng#readme"
 }
